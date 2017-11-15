@@ -5,6 +5,8 @@ import Essential from './Essential.jsx';
 import request from 'superagent';
 import { Segment } from 'semantic-ui-react'
 
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 export default class App extends React.Component {
   constructor(){
     super();
@@ -29,6 +31,7 @@ this.updateNames= this.updateNames.bind(this);
 this.updateQuantity = this.updateQuantity.bind(this);
 this.updateEssential = this.updateEssential.bind(this);
 this.addEssentialfield = this.addEssentialfield.bind(this);
+this.handlelogout =this.handlelogout.bind(this);
   }
   handleTextarea(event){
     let val = event.target.value;
@@ -49,6 +52,19 @@ this.addEssentialfield = this.addEssentialfield.bind(this);
      alert('Details are succesfully submitted ' );
    }
  });
+  }
+  handlelogout(){
+    console.log(cookies.get('email'),"cookie before logout");
+    cookies.remove('email');
+     request.post('/logout')
+     .query({email: cookies.get('email')})
+     .end((err, res) => {
+       if (err)
+         console.log(err);
+         else
+         console.log(res,'response')
+      hashHistory.push('/Logout');
+     });
   }
   onChangeUrl(event){
     let val1 = event.target.value;
@@ -100,13 +116,13 @@ this.addEssentialfield = this.addEssentialfield.bind(this);
     //this.setState({EssentialIngredient:mainIng});
   }
   render() {
-    console.log('state : ',this.state);
-    return (
-      <div>
+
+      return(<div>
       <Segment color='green' style={{marginLeft:'10%', marginRight:'10%', marginTop:'2%'}}>
       <br/>
       <h1 style={{color:'grey',textAlign:'center'}}>Enter Details of your DIYS Video</h1>
       <br/>
+      <Button type='submit'style={{textAlign:'center'}} onClick={this.handlelogout}>logout</Button>
       <Form style={{width:'86%',marginLeft:'7.5%'}}>
       <Form.Input required={true} placeholder='Enter url of your DIYS video' onChange={this.onChangeUrl}/>
       <Form.TextArea required={true} autoHeight placeholder='Procedure to make' onChange={this.handleTextarea}/>
@@ -132,7 +148,7 @@ this.addEssentialfield = this.addEssentialfield.bind(this);
       <br/>
       </Form>
       </Segment>
-      </div>
-    );
-  }
+      </div>)
+    }
+
 }

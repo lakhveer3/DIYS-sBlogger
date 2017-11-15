@@ -36,8 +36,8 @@ var component = this.props.MainIngred.map((item,i) =>{
                   { key: 'li', text: 'litres', value: 'li',index:4  },
       ];
 return(
-<div>
-<Form  key={i}>
+<div key={i}>
+<Form  >
 <Form.Group widths='equal'>
 <Form.Input placeholder='Name' onBlur={this.changeName.bind(this,i)} />
 <Form.Input placeholder='Quantity' onBlur={this.changeQuantity.bind(this,i)} />

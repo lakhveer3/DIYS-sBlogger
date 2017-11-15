@@ -32,6 +32,12 @@ ingredients.post('/login',passport.authenticate('local'),(req,res)=>{
     res.send(req.user);
   }
 });
+ingredients.post('/logout', function(req, res){
+    // req.flash('success_msg', 'You are logged out');
+    console.log("you are logging out ",req.query.email);
+    res.send(req.query.email);
+});
+
 ingredients.post('/register', (req,res)=>{
   let val =JSON.parse(req.query.UserDetails);
   let newUser= new users(val);

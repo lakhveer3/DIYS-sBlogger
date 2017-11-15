@@ -14,8 +14,8 @@ changeName(i,event){
 render() {
 var component = this.props.EssentialIngredient.map((item,i) =>{
 return(
-<div>
-<Form  key={i}>
+<div key={i}>
+<Form  >
 <Form.Group>
 <Form.Input placeholder='Name'  width={13} onBlur={this.changeName.bind(this,i)}/>
 <Form.Button width={4} onClick={this.props.addEssential}>Add</Form.Button >

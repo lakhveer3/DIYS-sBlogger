@@ -33,9 +33,10 @@ export default class Login extends React.Component {
     .set('Accept', 'application/json')
     .end(function(err, res){
       if (err || !res.ok) {
-        alert('Oh no! error');
+        alert('Incorrect username or password');
       } else {
         console.log(res);
+        console.log('cookie name:'+res.body.email);
           cookies.set('email',res.body.email);
           hashHistory.push('/bloggerPage');
 
