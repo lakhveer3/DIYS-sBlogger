@@ -26,7 +26,7 @@ changeQuantity(i,event){
 	, indexOfValue = data.options.findIndex(x => x.value==value)
 	, indexOfMap = data.options[indexOfValue].index;
   console.log(value, ' -- ',indexOfMap);
-
+this.props.changeUnit(value,indexOfMap);
 }
 render() {
 var component = this.props.MainIngred.map((item,i) =>{

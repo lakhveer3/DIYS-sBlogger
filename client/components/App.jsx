@@ -30,6 +30,7 @@ this.handleTextarea = this.handleTextarea.bind(this);
 this.addFields =this.addFields.bind(this);
 this.updateNames= this.updateNames.bind(this);
 this.updateQuantity = this.updateQuantity.bind(this);
+this.updateUnit = this.updateUnit.bind(this);
 this.updateEssential = this.updateEssential.bind(this);
 this.addEssentialfield = this.addEssentialfield.bind(this);
 this.handlelogout =this.handlelogout.bind(this);
@@ -103,6 +104,10 @@ this.handlelogout =this.handlelogout.bind(this);
     //this.setState({MainIngredient:ingredientname});
 
   }
+  updateUnit(value,index){
+	  let ingredient = this.state.MainIngredient[index];
+	  ingredient.unit = value;
+  }
   updateQuantity(value,index){
     let ingredient =  this.state.MainIngredient[index];
     ingredient.quantity = value;
@@ -139,7 +144,7 @@ this.handlelogout =this.handlelogout.bind(this);
       <label><b>Enter Main ingredients </b></label>
       <br/>
       <br/>
-      <Child MainIngred = {this.state.MainIngredient} addfield= {this.addFields} changeName ={this.updateNames} changeQuantiy={this.updateQuantity}/>
+      <Child MainIngred = {this.state.MainIngredient} addfield= {this.addFields} changeName ={this.updateNames} changeQuantiy={this.updateQuantity} changeUnit={this.updateUnit}/>
       <br/>
       <br/>
 
