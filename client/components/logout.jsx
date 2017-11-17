@@ -5,7 +5,7 @@ export default class logout extends React.Component {
 }
 render() {
   return(
-    <div>
+    <div style={{marginLeft:'20%'}}>
     <h1>You Are Successfully logout</h1>
     </div>
   )

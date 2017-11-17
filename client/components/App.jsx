@@ -4,6 +4,7 @@ import Child from './child.jsx';
 import Essential from './Essential.jsx';
 import request from 'superagent';
 import { Segment } from 'semantic-ui-react'
+import {hashHistory} from 'react-router';
 
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -63,7 +64,9 @@ this.handlelogout =this.handlelogout.bind(this);
          console.log(err);
          else
          console.log(res,'response')
-      hashHistory.push('/Logout');
+	 alert('You successfully logout');
+      hashHistory.push('/');
+	  location.reload();
      });
   }
   onChangeUrl(event){
@@ -116,16 +119,20 @@ this.handlelogout =this.handlelogout.bind(this);
     //this.setState({EssentialIngredient:mainIng});
   }
   render() {
-
-      return(<div>
+	  var abc;
+	  if(cookies.get('email')){
+		console.log("inside if");
+	  abc=(<div>
       <Segment color='green' style={{marginLeft:'10%', marginRight:'10%', marginTop:'2%'}}>
       <br/>
       <h1 style={{color:'grey',textAlign:'center'}}>Enter Details of your DIYS Video</h1>
-      <br/>
-      <Button type='submit'style={{textAlign:'center'}} onClick={this.handlelogout}>logout</Button>
+     
+      <Button type='submit'style={{float:'right'}} onClick={this.handlelogout}>logout</Button>
+	  <br />
+	  <br />
       <Form style={{width:'86%',marginLeft:'7.5%'}}>
       <Form.Input required={true} placeholder='Enter url of your DIYS video' onChange={this.onChangeUrl}/>
-      <Form.TextArea required={true} autoHeight placeholder='Procedure to make' onChange={this.handleTextarea}/>
+      <Form.TextArea required={true}  rows={2} placeholder='Procedure to make' onChange={this.handleTextarea}/>
       <br/>
       <br/>
 
@@ -149,6 +156,15 @@ this.handlelogout =this.handlelogout.bind(this);
       </Form>
       </Segment>
       </div>)
+	  }
+	  else{
+		  console.log("in else ");
+	  hashHistory.push('/');
+	   location.reload();
+	  }
+      return(
+		abc
+	  )
     }
 
 }

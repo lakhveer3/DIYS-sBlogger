@@ -44365,7 +44365,9 @@ var App = function (_React$Component) {
       cookies.remove('email');
       _superagent2.default.post('/logout').query({ email: cookies.get('email') }).end(function (err, res) {
         if (err) console.log(err);else console.log(res, 'response');
-        _reactRouter.hashHistory.push('/Logout');
+        alert('You successfully logout');
+        _reactRouter.hashHistory.push('/');
+        location.reload();
       });
     }
   }, {
@@ -44429,8 +44431,10 @@ var App = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var abc;
       if (cookies.get('email')) {
-        var app = _react2.default.createElement(
+        console.log("inside if");
+        abc = _react2.default.createElement(
           'div',
           null,
           _react2.default.createElement(
@@ -44442,17 +44446,18 @@ var App = function (_React$Component) {
               { style: { color: 'grey', textAlign: 'center' } },
               'Enter Details of your DIYS Video'
             ),
-            _react2.default.createElement('br', null),
             _react2.default.createElement(
               _semanticUiReact.Button,
-              { type: 'submit', style: { textAlign: 'center' }, onClick: this.handlelogout },
+              { type: 'submit', style: { float: 'right' }, onClick: this.handlelogout },
               'logout'
             ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement('br', null),
             _react2.default.createElement(
               _semanticUiReact.Form,
               { style: { width: '86%', marginLeft: '7.5%' } },
               _react2.default.createElement(_semanticUiReact.Form.Input, { required: true, placeholder: 'Enter url of your DIYS video', onChange: this.onChangeUrl }),
-              _react2.default.createElement(_semanticUiReact.Form.TextArea, { required: true, autoHeight: true, placeholder: 'Procedure to make', onChange: this.handleTextarea }),
+              _react2.default.createElement(_semanticUiReact.Form.TextArea, { required: true, rows: 2, placeholder: 'Procedure to make', onChange: this.handleTextarea }),
               _react2.default.createElement('br', null),
               _react2.default.createElement('br', null),
               _react2.default.createElement(
@@ -44494,13 +44499,11 @@ var App = function (_React$Component) {
           )
         );
       } else {
-        _reactRouter.hashHistory.push('/Login');
+        console.log("in else ");
+        _reactRouter.hashHistory.push('/');
+        location.reload();
       }
-      return _react2.default.createElement(
-        'div',
-        null,
-        app
-      );
+      return abc;
     }
   }]);
 
@@ -63922,14 +63925,18 @@ var child = function (_React$Component) {
     }
   }, {
     key: 'changeUnit',
-    value: function changeUnit(e, data) {
+    value: function changeUnit(i, data) {
       console.log(data, "dataaaaa******");
 
       // console.log(`event.target.value: ${JSON.stringify(event.target.value)}`);
       //
       // console.log(`data : ${JSON.stringify(data, null, 2)}`);
-      var value = data.value;
-      console.log(value);
+      var value = data.value,
+          indexOfValue = data.options.findIndex(function (x) {
+        return x.value == value;
+      }),
+          indexOfMap = data.options[indexOfValue].index;
+      console.log(value, ' -- ', indexOfMap);
     }
   }, {
     key: 'render',
@@ -63939,7 +63946,7 @@ var child = function (_React$Component) {
       var component = this.props.MainIngred.map(function (item, i) {
         var _React$createElement;
 
-        var option = [{ key: 'ounce', text: 'Ounce', value: 'Ounce', index: 0 }, { key: 'pound', text: 'Pound', value: 'pound', index: 1 }, { key: 'kg', text: 'Kg', value: 'kg', index: 2 }, { key: 'gm', text: 'gm', value: 'gm', index: 3 }, { key: 'li', text: 'litres', value: 'li', index: 4 }];
+        var option = [{ key: 'ounce', text: 'Ounce', value: 'Ounce', index: i }, { key: 'pound', text: 'Pound', value: 'pound', index: i }, { key: 'kg', text: 'Kg', value: 'kg', index: i }, { key: 'gm', text: 'gm', value: 'gm', index: i }, { key: 'li', text: 'litres', value: 'li', index: i }, { key: 'Number', text: 'Number', value: 'number', index: i }];
         return _react2.default.createElement(
           'div',
           { key: i },
@@ -63949,8 +63956,8 @@ var child = function (_React$Component) {
             _react2.default.createElement(
               _semanticUiReact.Form.Group,
               { widths: 'equal' },
-              _react2.default.createElement(_semanticUiReact.Form.Input, { placeholder: 'Name', onBlur: _this2.changeName.bind(_this2, i) }),
-              _react2.default.createElement(_semanticUiReact.Form.Input, { placeholder: 'Quantity', onBlur: _this2.changeQuantity.bind(_this2, i) }),
+              _react2.default.createElement(_semanticUiReact.Form.Input, { placeholder: 'Name', type: 'text', onBlur: _this2.changeName.bind(_this2, i) }),
+              _react2.default.createElement(_semanticUiReact.Form.Input, { placeholder: 'Quantity', type: 'number', onBlur: _this2.changeQuantity.bind(_this2, i) }),
               _react2.default.createElement(_semanticUiReact.Form.Select, (_React$createElement = { placeholder: 'Unit' }, _defineProperty(_React$createElement, 'placeholder', 'Unit'), _defineProperty(_React$createElement, 'onChange', _this2.changeUnit), _defineProperty(_React$createElement, 'options', option), _React$createElement)),
               _react2.default.createElement(
                 _semanticUiReact.Form.Button,
@@ -68702,11 +68709,13 @@ var Login = function (_React$Component) {
 
     _this.state = {
       username: '',
-      password: ''
+      password: '',
+      value: ''
     };
     _this.handleUser = _this.handleUser.bind(_this);
     _this.handlePassword = _this.handlePassword.bind(_this);
     _this.submitLogin = _this.submitLogin.bind(_this);
+    _this.handleChange = _this.handleChange.bind(_this);
     return _this;
   }
 
@@ -68723,17 +68732,26 @@ var Login = function (_React$Component) {
       this.setState({ password: val });
     }
   }, {
+    key: 'handleChange',
+    value: function handleChange(e, _ref) {
+      var value = _ref.value;
+
+      this.setState({ value: value });
+    }
+  }, {
     key: 'submitLogin',
     value: function submitLogin() {
-      _superagent2.default.post('/login').query({ username: this.state.username, password: this.state.password }).set('X-API-Key', 'foobar').set('Accept', 'application/json').end(function (err, res) {
+      var Usertype = this.state.value;
+
+      _superagent2.default.post('/login').query({ username: this.state.username, password: this.state.password, value: this.state.value }).set('X-API-Key', 'foobar').set('Accept', 'application/json').end(function (err, res) {
         if (err || !res.ok) {
           alert('Incorrect username or password');
-        } else {
-          console.log(res);
-          console.log('cookie name:' + res.body.email);
+        } else if (Usertype == res.body.value) {
+          console.log(res, "response");
+          console.log('user type:' + res.body.value + "state value:" + Usertype);
           cookies.set('email', res.body.email);
           _reactRouter.hashHistory.push('/bloggerPage');
-        }
+        } else alert("Incorrect user type");
       });
     }
   }, {
@@ -68755,58 +68773,97 @@ var Login = function (_React$Component) {
     key: 'render',
     value: function render() {
       console.log('state : ', this.state);
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          _semanticUiReact.Segment,
-          { color: 'green', style: { marginLeft: '10%', marginRight: '10%', marginTop: '2%' } },
+      var abc;
+      if (!cookies.get('email')) {
+        abc = _react2.default.createElement(
+          'div',
+          null,
           _react2.default.createElement(
-            'h1',
-            { style: { color: 'grey', textAlign: 'left' } },
-            'DIYS'
-          ),
-          _react2.default.createElement(
-            'h1',
-            { style: { color: 'grey', textAlign: 'center' } },
-            'Account Login'
-          ),
-          _react2.default.createElement(
-            _semanticUiReact.Form,
-            { style: { width: '86%', marginLeft: '7.5%' } },
+            _semanticUiReact.Segment,
+            { color: 'green', style: { marginLeft: '10%', marginRight: '10%', marginTop: '2%' } },
             _react2.default.createElement(
-              _semanticUiReact.Form.Field,
-              null,
+              'h1',
+              { style: { color: 'grey', textAlign: 'left' } },
+              'DIYS'
+            ),
+            _react2.default.createElement(
+              'h1',
+              { style: { color: 'grey', textAlign: 'center' } },
+              'Account Login'
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Form,
+              { style: { width: '86%', marginLeft: '7.5%' } },
               _react2.default.createElement(
-                'label',
+                _semanticUiReact.Form.Field,
                 null,
-                'Username'
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'Username'
+                ),
+                _react2.default.createElement('input', { placeholder: 'Username', onChange: this.handleUser })
               ),
-              _react2.default.createElement('input', { placeholder: 'Username', onChange: this.handleUser })
-            ),
-            _react2.default.createElement(
-              _semanticUiReact.Form.Field,
-              null,
               _react2.default.createElement(
-                'label',
+                _semanticUiReact.Form.Field,
                 null,
-                'Password'
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'Password'
+                ),
+                _react2.default.createElement('input', { placeholder: 'Password', type: 'password', onChange: this.handlePassword })
               ),
-              _react2.default.createElement('input', { placeholder: 'Password', onChange: this.handlePassword })
-            ),
-            _react2.default.createElement(
-              _semanticUiReact.Button,
-              { type: 'submit', onClick: this.submitLogin },
-              'Login'
-            ),
-            _react2.default.createElement(
-              _semanticUiReact.Button,
-              { type: 'submit', onClick: this.submitRegister.bind(this) },
-              'Register'
+              _react2.default.createElement(
+                _semanticUiReact.Form.Field,
+                null,
+                'Select User: ',
+                _react2.default.createElement(
+                  'b',
+                  null,
+                  this.state.value
+                )
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Form.Field,
+                null,
+                _react2.default.createElement(_semanticUiReact.Radio, {
+                  label: 'Blogger',
+                  name: 'radioGroup',
+                  value: 'Blogger',
+                  checked: this.state.value === 'Blogger',
+                  onChange: this.handleChange
+                })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Form.Field,
+                null,
+                _react2.default.createElement(_semanticUiReact.Radio, {
+                  label: 'Retailer',
+                  name: 'radioGroup',
+                  value: 'Retailer',
+                  checked: this.state.value === 'Retailer',
+                  onChange: this.handleChange
+                })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Button,
+                { type: 'submit', onClick: this.submitLogin },
+                'Login'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Button,
+                { type: 'submit', onClick: this.submitRegister.bind(this) },
+                'Register'
+              )
             )
           )
-        )
-      );
+        );
+      } else {
+        _reactRouter.hashHistory.push('/bloggerPage');
+        location.reload();
+      }
+      return abc;
     }
   }]);
 
@@ -68860,25 +68917,38 @@ var RegisterForm = function (_React$Component) {
       name: '',
       username: '',
       password: '',
+      rePassword: '',
       email: '',
-      disable: true
+      disable: true,
+      checked: false,
+      value: ''
     };
     _this.handleUser = _this.handleUser.bind(_this);
     _this.handleUsername = _this.handleUsername.bind(_this);
     _this.handlePassword = _this.handlePassword.bind(_this);
+    _this.handleRePassword = _this.handleRePassword.bind(_this);
     _this.handleEmail = _this.handleEmail.bind(_this);
     _this.submitRegister = _this.submitRegister.bind(_this);
+    _this.handleCheck = _this.handleCheck.bind(_this);
+    _this.handleChange = _this.handleChange.bind(_this);
     return _this;
   }
 
   _createClass(RegisterForm, [{
     key: 'validateForm',
     value: function validateForm() {
-      if (this.state.name == '' || this.state.name == null || this.state.username == '' || this.state.username == null || this.state.email == '' || this.state.email == null || this.state.password == '' || this.state.password == null) {
+      if (this.state.name == '' || this.state.name == null || this.state.username == '' || this.state.username == null || this.state.email == '' || this.state.email == null || this.state.password == '' || this.state.password == null || this.state.rePassword == '' || this.state.rePassword == null) {
         this.setState({ disable: true });
       } else {
         this.setState({ disable: false });
       }
+    }
+  }, {
+    key: 'handleChange',
+    value: function handleChange(e, _ref) {
+      var value = _ref.value;
+
+      this.setState({ value: value });
     }
   }, {
     key: 'handleUser',
@@ -68902,6 +68972,18 @@ var RegisterForm = function (_React$Component) {
       this.validateForm();
     }
   }, {
+    key: 'handleCheck',
+    value: function handleCheck(event) {
+      this.setState({ checked: !this.state.checked });
+    }
+  }, {
+    key: 'handleRePassword',
+    value: function handleRePassword(event) {
+      var val = event.target.value;
+      this.setState({ rePassword: val });
+      this.validateForm();
+    }
+  }, {
     key: 'handleEmail',
     value: function handleEmail(event) {
       var val = event.target.value;
@@ -68911,13 +68993,28 @@ var RegisterForm = function (_React$Component) {
   }, {
     key: 'submitRegister',
     value: function submitRegister() {
-      _superagent2.default.post('/register').query({ UserDetails: JSON.stringify(this.state) }).end(function (err, res) {
-        if (err || !res.ok) {
-          alert('Oh no! error');
-        } else {
-          _reactRouter.hashHistory.push('/Login');
-        }
-      });
+      console.log(this.state.checked, "checked");
+      if (this.state.password == this.state.rePassword) {
+        console.log("&&&&");
+        var registerForm = {
+          'username': this.state.username,
+          'password': this.state.password,
+          'email': this.state.email,
+          'name': this.state.name,
+          'value': this.state.value
+        };
+
+        _superagent2.default.post('/register').query({ details: JSON.stringify(registerForm) }).end(function (err, res) {
+          if (err || !res.ok) {
+            alert('Oh no! error');
+          } else {
+            _reactRouter.hashHistory.push('/');
+            location.reload();
+          }
+        });
+      } else {
+        alert('Password and confirm password should be same');
+      }
     }
   }, {
     key: 'render',
@@ -68945,7 +69042,7 @@ var RegisterForm = function (_React$Component) {
                 null,
                 'Name'
               ),
-              _react2.default.createElement('input', { placeholder: 'Name', required: 'true', onChange: this.handleUser })
+              _react2.default.createElement('input', { placeholder: 'Name', type: 'text', required: 'true', onChange: this.handleUser })
             ),
             _react2.default.createElement(
               _semanticUiReact.Form.Field,
@@ -68955,7 +69052,7 @@ var RegisterForm = function (_React$Component) {
                 null,
                 'Username'
               ),
-              _react2.default.createElement('input', { placeholder: 'Username', required: 'true', onChange: this.handleUsername })
+              _react2.default.createElement('input', { placeholder: 'Username', type: 'text', required: 'true', onChange: this.handleUsername })
             ),
             _react2.default.createElement(
               _semanticUiReact.Form.Field,
@@ -68965,7 +69062,17 @@ var RegisterForm = function (_React$Component) {
                 null,
                 'Password'
               ),
-              _react2.default.createElement('input', { placeholder: 'Password', required: 'true', onChange: this.handlePassword })
+              _react2.default.createElement('input', { placeholder: 'Password', type: 'password', required: 'true', onChange: this.handlePassword })
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Field,
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'Confirm Password'
+              ),
+              _react2.default.createElement('input', { placeholder: 'Confirm Password', type: 'password', required: 'true', onChange: this.handleRePassword })
             ),
             _react2.default.createElement(
               _semanticUiReact.Form.Field,
@@ -68977,6 +69084,47 @@ var RegisterForm = function (_React$Component) {
               ),
               _react2.default.createElement('input', { placeholder: 'Email', name: 'email', type: 'text', required: 'true', onChange: this.handleEmail })
             ),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Field,
+              null,
+              'Select User: ',
+              _react2.default.createElement(
+                'b',
+                null,
+                this.state.value
+              )
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Field,
+              null,
+              _react2.default.createElement(_semanticUiReact.Radio, {
+                label: 'Blogger',
+                name: 'radioGroup',
+                value: 'Blogger',
+                checked: this.state.value === 'Blogger',
+                onChange: this.handleChange
+              })
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Field,
+              null,
+              _react2.default.createElement(_semanticUiReact.Radio, {
+                label: 'Retailer',
+                name: 'radioGroup',
+                value: 'Retailer',
+                checked: this.state.value === 'Retailer',
+                onChange: this.handleChange
+              })
+            ),
+            _react2.default.createElement(_semanticUiReact.Checkbox, { checked: this.state.checked, onChange: this.handleCheck }),
+            'I Agree ',
+            _react2.default.createElement(
+              'a',
+              { href: 'terms' },
+              'all terms and conditions'
+            ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement('br', null),
             _react2.default.createElement(
               _semanticUiReact.Button,
               { type: 'submit', disabled: this.state.disable },
@@ -69032,7 +69180,7 @@ var logout = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        null,
+        { style: { marginLeft: '20%' } },
         _react2.default.createElement(
           'h1',
           null,

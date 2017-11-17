@@ -15,6 +15,9 @@ var UserSchema = mongoose.Schema({
 	},
 	name: {
 		type: String
+	},
+	value:{
+		type: String
 	}
 });
 
@@ -34,6 +37,7 @@ module.exports.getUserByUsername = function(username, callback){
 	var query = {username: username};
 	User.findOne(query, callback);
 }
+
 
 module.exports.getUserById = function(id, callback){
 	User.findById(id, callback);

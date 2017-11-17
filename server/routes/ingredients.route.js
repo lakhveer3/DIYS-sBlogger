@@ -39,7 +39,8 @@ ingredients.post('/logout', function(req, res){
 });
 
 ingredients.post('/register', (req,res)=>{
-  let val =JSON.parse(req.query.UserDetails);
+  let val =JSON.parse(req.query.details);
+  console.log(val,"value in router");
   let newUser= new users(val);
 
   console.log(req.query,"88");
@@ -48,6 +49,7 @@ ingredients.post('/register', (req,res)=>{
             if (err) {
                 res.send('Error in registration');
             } else {
+				console.log(reply,"new user");
               res.send('User details saved successfully');
             }
           });

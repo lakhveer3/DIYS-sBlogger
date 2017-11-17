@@ -14,15 +14,21 @@ passport.deserializeUser(function(id, done) {
 console.log("inside passport");
 
 // passport.use(new LocalStrategy( function(username, password, done) {
-passport.use(new LocalStrategy(function(email, password, done) {
-      console.log("inside callback passport"+email+"----"+password+"----");
+passport.use(new LocalStrategy(function(email, password ,done) {
+      console.log("inside callback passport"+email+"----"+password+"----"+done);
         process.nextTick(function() {
           console.log("inside callback!!!!");
-          User.getUserByUsername(email, function(err, user){
-            if(err) throw err;
-            console.log(user);
-            return done(null, user);
-          });
+          User.findOne({
+			  username:email,
+			  password:password
+		  },function(err, user) {
+              if(err){
+                return done(null, err);
+                }
+              else{
+                return done(null, user);
+                }
+		  });
 
         });
     }));
